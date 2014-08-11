@@ -1,0 +1,29 @@
+<div>
+	<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+	  	<div class="container-fluid">
+	    	<div class="navbar-header">
+	      		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        		<span class="sr-only">Toggle navigation</span>
+	        		<span class="icon-bar"></span>
+	        		<span class="icon-bar"></span>
+	        		<span class="icon-bar"></span>
+	      		</button>
+	      		<a class="navbar-brand" href="#">AngularJs</a>
+	    	</div>
+	
+	    	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      		<ul class="nav navbar-nav">
+	        		<!-- <li ng-class="taskActive" class="active"><a href="#/dashboard/tasks"><span class="glyphicon glyphicon-list-alt"></span> Taks</a></li> -->
+	        		<!-- <li ng-class="userActive"><a href="#/dashboard"><span class="glyphicon glyphicon-user"></span> Users</a></li> -->
+	      		</ul>
+	      		<ul class="nav navbar-nav navbar-right" ng-controller="sessionController">
+	        		<li><a ng-click="logout()" href="#">{{ userName }} Logout</a></li>
+	      		</ul>
+	    	</div>
+	  	</div>
+	</nav>
+
+	<div class="container">
+		<div ng-include src="partialURL"></div>
+	</div>
+</div>

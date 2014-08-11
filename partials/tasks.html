@@ -1,0 +1,86 @@
+<div id="tasks" class="col-md-6 list-group">
+    <li class="list-group-item">
+        <h4 style=""><span class="glyphicon glyphicon-tasks"></span> Tasks <span ng-show="tasks.length > 0">{{ remaining() }} / {{ tasks.length }}</span></h4>
+    </li>
+    <li class="list-group-item">
+        <div class="input-group input-group-sm">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Filter <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">By Name</a></li>
+                    <li><a href="#">By Date</a></li>
+                    <li><a href="#">By Completed</a></li>
+                    <li><a href="#">By Dont Completed</a></li>
+                </ul>
+            </div>
+            <input type="text" class="form-control" placeholder="Search">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
+            </div>
+        </div>
+    </li>
+    <li class="list-group-item">
+        <input type="text" class="form-control input-sm" name="" id="" placeholder="Add a task" autofocus>
+    </li>
+    <a id="task{{ task.id }}" class="list-group-item" ng-repeat="task in tasks">
+        <div class="row">
+            <div class="col-md-1">
+                <span ng-show="task.state" class="glyphicon glyphicon-ok"></span>
+            </div>
+            <div class="col-md-9">
+                <div class="input-group input-group-sm input-resposign">
+                    <input type="text" class="form-control input-sm" placeholder="{{ task.name }}">
+                    <input type="text" class="form-control input-sm" placeholder="{{ task.description }}">
+                </div>
+                <p class="text-right"><small>{{ task.created_at }}</small></p>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
+                <button ng-click="listTickets(task.id,task.name)" class="btn btn-info" type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
+            </div>
+        </div>
+    </a>
+</div>
+<div id="items" class="col-md-6" ng-show="visible_tickets">
+    <li class="list-group-item">
+        <h4 style=""><span class="glyphicon glyphicon-list"></span> {{ current_task_name }}</h4>
+    </li>
+    <li class="list-group-item">
+        <div class="input-group input-group-sm">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Filter <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">By Name</a></li>
+                    <li><a href="#">By Date</a></li>
+                    <li><a href="#">By Completed</a></li>
+                    <li><a href="#">By Dont Completed</a></li>
+                </ul>
+            </div>
+            <input type="text" class="form-control not-border" placeholder="Search">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
+            </div>
+        </div>
+    </li>
+    <li class="list-group-item">
+        <input type="text" class="form-control not-border input-sm" placeholder="Add a item">
+    </li>
+    <li ng-show="tasks.length > 0" class="list-group-item">
+        <div class="progress">
+            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="width: {{ percentage() }}%">
+                {{ percentage() }}%
+            </div>
+        </div>
+    </li>
+    <li class="list-group-item" ng-repeat="ticket in tickets">
+        <div class="input-group input-group-sm">
+            <span class="input-group-addon">
+                <input ng-click="changeState(ticket.id, ticket.state ? true : false)" type="checkbox" {{ checkState(ticket.id) }}>
+            </span>
+            <input type="text" class="form-control" placeholder="{{ ticket.description }}">
+            <span class="input-group-btn">
+                <button ng-click="deleteTicket(ticket.id)" class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
+            </span>
+        </div>
+    </li>
+</div>

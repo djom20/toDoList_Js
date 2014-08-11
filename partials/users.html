@@ -1,0 +1,39 @@
+<div id="users">
+    <h1>Users</h1>
+    <br>
+    <div class="col-md-6">
+        <div class="well col-md-6 text-center" ng-repeat="user in users">
+            <p>{{ user.name }} {{ user.lastname }}<br>
+            {{ user.email }}</p>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span></button>
+                <button type="button" class="btn btn-info" ng-if="user.state"><span class="glyphicon glyphicon-eye-open"></span></button>
+                <button type="button" class="btn btn-info" ng-if="!user.state"><span class="glyphicon glyphicon-eye-close"></span></button>
+                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <form role="form">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputFile">File input</label>
+                <input type="file" id="exampleInputFile">
+                <p class="help-block">Example block-level help text here.</p>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> Check me out
+                </label>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</div>
