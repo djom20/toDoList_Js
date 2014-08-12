@@ -5,7 +5,10 @@ angular.module('toDoList.services',['ngResource'])
     }])
 
     .factory('ticketsService',['$resource', function($resource){
-        return $resource('http://todolistrails.herokuapp.com/api/v1/users/:userId/tasks/:tasksId/tickets', {userId: '@uid', tasksId: '@tid'}, {listTickets:{method:"GET",isArray:true}});
+        return $resource('http://todolistrails.herokuapp.com/api/v1/users/:userId/tasks/:tasksId/tickets/:ticketsId', {userId: '@uid', tasksId: '@tid', ticketsId: '@ticd'}, {
+        	listTickets:{method:"GET",isArray:true},
+        	deleteTickets:{method:"DELETE",isArray:true}
+        });
     }])
 
     .factory('usersService',['$resource', function($resource){

@@ -20,12 +20,12 @@
         </div>
     </li>
     <li class="list-group-item">
-        <input type="text" class="form-control input-sm" name="" id="" placeholder="Add a task" autofocus>
+        <input type="text" class="form-control input-sm" placeholder="Add a task" autofocus>
     </li>
     <a id="task{{ task.id }}" class="list-group-item" ng-repeat="task in tasks">
         <div class="row">
             <div class="col-md-1">
-                <span ng-show="task.state" class="glyphicon glyphicon-ok"></span>
+                <span ng-show="task.completed" class="glyphicon glyphicon-ok"></span>
             </div>
             <div class="col-md-9">
                 <div class="input-group input-group-sm input-resposign">
@@ -35,15 +35,20 @@
                 <p class="text-right"><small>{{ task.created_at }}</small></p>
             </div>
             <div class="col-md-2">
-                <button class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
-                <button ng-click="listTickets(task.id,task.name)" class="btn btn-info" type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                <button ng-click="deleteTasks(ticket)" class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
+                <button ng-click="listTickets(task)" class="btn btn-info" type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
             </div>
         </div>
     </a>
 </div>
 <div id="items" class="col-md-6" ng-show="visible_tickets">
     <li class="list-group-item">
-        <h4 style=""><span class="glyphicon glyphicon-list"></span> {{ current_task_name }}</h4>
+        <div class="input-group input-group-sm">
+            <button type="button" class="close" ng-click="dontTickets()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        </div>
+    </li>
+    <li class="list-group-item">
+        <h4 style=""><span class="glyphicon glyphicon-list"></span> {{ current_task.name }}</h4>
     </li>
     <li class="list-group-item">
         <div class="input-group input-group-sm">
@@ -75,11 +80,11 @@
     <li class="list-group-item" ng-repeat="ticket in tickets">
         <div class="input-group input-group-sm">
             <span class="input-group-addon">
-                <input ng-click="changeState(ticket.id, ticket.state ? true : false)" type="checkbox" {{ checkState(ticket.id) }}>
+                <input ng-checked="{{ ticket.completed }}" ng-click="changeStateTicket(ticket.id)" type="checkbox">
             </span>
             <input type="text" class="form-control" placeholder="{{ ticket.description }}">
             <span class="input-group-btn">
-                <button ng-click="deleteTicket(ticket.id)" class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
+                <button ng-click="deleteTicket(ticket)" class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
             </span>
         </div>
     </li>
