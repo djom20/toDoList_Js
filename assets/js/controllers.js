@@ -46,26 +46,18 @@ angular.module('toDoList.controllers', [])
 			$scope.current_user = $cookieStore.get('current_user');
 			$scope.userName = $cookieStore.get('current_user').name + ' ' + $cookieStore.get('current_user').lastname;
 			$scope.visible_tickets = false;
-			$scope.current_task = '';
+			$scope.current_task = {};
+			$scope.tickets = {};
 			
 			$scope.tasks = tasksService.listTasks({}, {'uid': $scope.current_user.id}, function(response){
 	        	console.log('Correct Services Api Tasks');
 	        });
 
 		    $scope.listTickets = function(current_task) {
+			    console.log('List Tickets');
 		        $scope.tickets = ticketsService.listTickets({}, {'uid':$scope.current_user.id, 'tid': current_task.id}, function(response){
 		        	console.log('Correct Services Api Tickets');
 		        });
-
-			    $scope.percentage = function() {
-			    	console.log('Charge Percentaje');
-			      	var remaining = 0;
-			      	var total = 0;
-			    	angular.forEach($scope.tickets, function(ticket) { remaining += ticket.completed ? 1 : 0; });
-			    	total = (remaining * 100) / $scope.tickets.length;
-			    	if(total == 100){ current_task.completed = true; }else{ current_task.completed = false; }
-			      	return total;
-			    };
 
 		        $scope.visible_tickets = true;
 		        $scope.current_task = current_task;
@@ -74,11 +66,19 @@ angular.module('toDoList.controllers', [])
 		      	return current_task.id;
 		    };
 
+			$scope.percentage = function(){
+		    	console.log('Charge Percentaje');
+		      	var remaining = 0;
+		      	var total = 0;
+		    	angular.forEach($scope.tickets, function(ticket) { remaining += ticket.completed ? 1 : 0; });
+		    	if($scope.tickets.length > 0){ total = (remaining * 100) / $scope.tickets.length; }
+		    	if(total == 100){ $scope.current_task.completed = true; }else{ $scope.current_task.completed = false; }
+		      	return Math.round(total);
+		    };
+
 			$scope.remaining = function() {
 		      	var count = 0;
-		    	angular.forEach($scope.tasks, function(task) {
-			        count += task.completed ? 1 : 0;
-		      	});
+		    	angular.forEach($scope.tasks, function(task) { count += task.completed ? 1 : 0; });
 		      	return count;
 		    };
 
@@ -98,11 +98,33 @@ angular.module('toDoList.controllers', [])
 		        });
 		    };
 
-		    $scope.deleteTasks = function(task) {
+		    $scope.deleteTask = function(task){
+		    	if($scope.current_task.id = task.id){ $scope.dontTickets(); }
 		    	$scope.tasks.splice($scope.tasks.indexOf(task), 1);
 		    };
 
-		    $scope.dontTickets = function(id){ $scope.visible_tickets = false; };
+		    $scope.deleteTicketsComplete = function(){
+		    	// angular.forEach($scope.tickets, function(ticket){
+			    //     if(ticket.completed == true){
+			    //     	$scope.tickets.splice($scope.tickets.indexOf(temp_tickets[i]), 1);
+			    //     }
+		     //  	});
+				console.log('No hace nada');
+				alert('No hace nada');
+		    };
+
+		    $scope.deleteTasksComplete = function(){
+		    	// angular.forEach($scope.tickets, function(ticket){
+			    //     if(ticket.completed == true){
+			    //     	$scope.tickets.splice($scope.tickets.indexOf(temp_tickets[i]), 1);
+			    //     }
+		     //  	});
+				$scope.dontTickets();
+				console.log('No hace nada');
+				alert('No hace nada');
+		    };
+
+		    $scope.dontTickets = function(){ $scope.visible_tickets = false; };
 
 		  	$scope.partialURL = 'partials/tasks.html';
 		}else{ $location.path('/'); }

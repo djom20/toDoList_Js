@@ -15,14 +15,14 @@
             </div>
             <input type="text" class="form-control" placeholder="Search">
             <div class="input-group-btn">
-                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
+                <button ng-click="deleteTasksComplete()" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
             </div>
         </div>
     </li>
     <li class="list-group-item">
         <input type="text" class="form-control input-sm" placeholder="Add a task" autofocus>
     </li>
-    <a id="task{{ task.id }}" class="list-group-item" ng-repeat="task in tasks">
+    <a class="list-group-item" ng-repeat="task in tasks | filter:state | orderBy:'creat_at' ">
         <div class="row">
             <div class="col-md-1">
                 <span ng-show="task.completed" class="glyphicon glyphicon-ok"></span>
@@ -30,12 +30,12 @@
             <div class="col-md-9">
                 <div class="input-group input-group-sm input-resposign">
                     <input type="text" class="form-control input-sm" placeholder="{{ task.name }}">
-                    <input type="text" class="form-control input-sm" placeholder="{{ task.description }}">
+                    <!-- <input type="text" class="form-control input-sm" placeholder="{{ task.description }}"> -->
                 </div>
                 <p class="text-right"><small>{{ task.created_at }}</small></p>
             </div>
             <div class="col-md-2">
-                <button ng-click="deleteTasks(ticket)" class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
+                <button ng-click="deleteTask(task)" class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
                 <button ng-click="listTickets(task)" class="btn btn-info" type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>
             </div>
         </div>
@@ -63,7 +63,7 @@
             </div>
             <input type="text" class="form-control not-border" placeholder="Search">
             <div class="input-group-btn">
-                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
+                <button ng-click="deleteTicketsComplete()" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
             </div>
         </div>
     </li>
