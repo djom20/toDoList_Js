@@ -1,11 +1,63 @@
-body { background-color: rgb(35, 113, 159); color: #fff; }
-#users, #tasks { color: #000; box-shadow: none; }
-#users p, #tasks p { margin: 0; }
-#users input, #tasks input, #items .not-border { border: none; width: 100%; }
-.list-group-item { padding: 5px 7px; }
-.glyphicon-ok { color: #0F3; margin-top: 20px; margin-left: 10px; }
-.input-resposign { width: 100%; }
-.input-group-btn>.btn { height: 34px; }
-.progress { margin-bottom: 0; }
-.list-group-item h4 { color: #000; }
-.color-white { color:#fff; }
+/* DOM */
+body {
+	background-color: rgb(35, 113, 159);
+	color: #fff;
+}
+
+/* ID's */
+
+#users, #tasks {
+	box-shadow: none;
+	color: #000;
+}
+
+#users p, #tasks p {
+	margin: 0;
+}
+
+#users input, #tasks input, #items .not-border {
+	border: none;
+	width: 100%;
+}
+
+/* Class */
+
+.list-group-item {
+	padding: 5px 7px;
+}
+
+.glyphicon-ok {
+	color: #0F3;
+	margin-left: 10px;
+	margin-top: 20px;
+}
+
+.input-resposign {
+	width: 100%;
+}
+
+.input-group-btn>.btn {
+	height: 34px;
+}
+
+.progress {
+ 	margin-bottom: 0;
+}
+
+.list-group-item h4 {
+	color: #000;
+}
+
+.color-white {
+	color:#fff;
+}
+
+a.list-group-item.completed {
+	border-left-color: #5cb85c;
+	border-left-width: 5px;
+}
+
+a.list-group-item.incompleted {
+	border-left-color: #fff;
+	border-left-width: 5px;
+}

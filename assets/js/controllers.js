@@ -9,11 +9,11 @@ angular.module('toDoList.controllers', [])
     	$scope.loginEmail = '';
 		$scope.loginPassword = '';
 
-		$scope.doClick = function(item, event) {
+		$scope.doClick = function(item, event){
 			$scope.users = usersService.listUsers({}, { }, function(response){
 	        	console.log('Correct Services Api Users');
 
-				angular.forEach($scope.users, function(user) {
+				angular.forEach($scope.users, function(user){
 					if(user.email == $scope.loginEmail){
 						if(user.name == $scope.loginPassword){
 			    			$scope.warning = false;
@@ -46,6 +46,9 @@ angular.module('toDoList.controllers', [])
 			$scope.current_user = $cookieStore.get('current_user');
 			$scope.userName = $cookieStore.get('current_user').name + ' ' + $cookieStore.get('current_user').lastname;
 			$scope.visible_tickets = false;
+			$scope.orderTasks = 'created_at';
+			$scope.orderTicktes = 'created_at';
+			$scope.divSize = 'col-md-12';
 			$scope.current_task = {};
 			$scope.tickets = {};
 			
@@ -53,11 +56,13 @@ angular.module('toDoList.controllers', [])
 	        	console.log('Correct Services Api Tasks');
 	        });
 
-		    $scope.listTickets = function(current_task) {
+		    $scope.listTickets = function(current_task){
 			    console.log('List Tickets');
 		        $scope.tickets = ticketsService.listTickets({}, {'uid':$scope.current_user.id, 'tid': current_task.id}, function(response){
 		        	console.log('Correct Services Api Tickets');
 		        });
+
+		        $scope.divSize = 'col-md-6';
 
 		        $scope.visible_tickets = true;
 		        $scope.current_task = current_task;
@@ -66,65 +71,72 @@ angular.module('toDoList.controllers', [])
 		      	return current_task.id;
 		    };
 
+		    $scope.sortBy = function(order, type){
+			    if(type == 'tasks'){
+			    	console.log('Orders Tasks by ' + order);
+			    	$scope.orderTasks = order;
+			    }else{
+			    	console.log('Orders Ticktes by ' + order);
+			    	$scope.orderTicktes = order;
+			    }
+		    };
+
 			$scope.percentage = function(){
-		    	console.log('Charge Percentaje');
 		      	var remaining = 0;
 		      	var total = 0;
 		    	angular.forEach($scope.tickets, function(ticket) { remaining += ticket.completed ? 1 : 0; });
 		    	if($scope.tickets.length > 0){ total = (remaining * 100) / $scope.tickets.length; }
-		    	if(total == 100){ $scope.current_task.completed = true; }else{ $scope.current_task.completed = false; }
 		      	return Math.round(total);
 		    };
 
-			$scope.remaining = function() {
+		    $scope.changeStateTicket = function(ticket){
+			    if(ticket.completed == 1){ ticket.completed = 0; }else{ ticket.completed = 1; }
+			    console.log('item change a ' + ticket.completed);
+			    $scope.validateStateTask();
+		    };
+
+		    $scope.validateStateTask = function(ticket){
+				total = $scope.percentage();
+		    	if(total == 100){ $scope.current_task.completed = 1; }else{ $scope.current_task.completed = 0; }
+		    };
+
+			$scope.remaining = function(){
 		      	var count = 0;
-		    	angular.forEach($scope.tasks, function(task) { count += task.completed ? 1 : 0; });
+		    	angular.forEach($scope.tasks, function(task){ count += task.completed ? 1 : 0; });
 		      	return count;
 		    };
 
-		    $scope.changeStateTicket = function(id) {
-		    	angular.forEach($scope.tickets, function(ticket) {
-			        if(ticket.id == id){
-			        	if(ticket.completed == true){ ticket.completed = false; }else{ ticket.completed = true; }
-			        	console.log('item change a ' + ticket.completed);
-			        }
-		      	});
+		    $scope.updateTicket = function(keyEvent, ticket, inputText){
+			    if (keyEvent.which === 13){ ticket.description = inputText; }
 		    };
 
-		    $scope.deleteTicket = function(ticket) {
-				$scope.tickets = ticketsService.deleteTickets({}, {'uid': $scope.current_user.id, 'tid': $scope.current_task.id, 'ticd': ticket.id}, function(response){
+		    $scope.updateTask = function(keyEvent, task, inputText){
+		      	if (keyEvent.which === 13){ task.name = inputText; }
+		    };
+
+		    $scope.deleteTicket = function(ticket){
+				// $scope.tickets = ticketsService.deleteTickets({}, {'uid': $scope.current_user.id, 'tid': $scope.current_task.id, 'ticd': ticket.id}, function(response){
 		    		$scope.tickets.splice($scope.tickets.indexOf(ticket), 1);
-			    	console.log('item delete id:' + ticket.id + ' index: ' + $scope.tickets.indexOf(ticket));
-		        });
+			    	// console.log('item delete id:' + ticket.id + ' index: ' + $scope.tickets.indexOf(ticket));
+		        // });
 		    };
 
 		    $scope.deleteTask = function(task){
-		    	if($scope.current_task.id = task.id){ $scope.dontTickets(); }
+		    	if($scope.current_task.id = task.id){ $scope.hideTickets(); }
 		    	$scope.tasks.splice($scope.tasks.indexOf(task), 1);
 		    };
 
 		    $scope.deleteTicketsComplete = function(){
-		    	// angular.forEach($scope.tickets, function(ticket){
-			    //     if(ticket.completed == true){
-			    //     	$scope.tickets.splice($scope.tickets.indexOf(temp_tickets[i]), 1);
-			    //     }
-		     //  	});
-				console.log('No hace nada');
-				alert('No hace nada');
+				$scope.tickets = $scope.tickets.filter(function(ticket){ return ticket.completed !== 1; });
 		    };
 
 		    $scope.deleteTasksComplete = function(){
-		    	// angular.forEach($scope.tickets, function(ticket){
-			    //     if(ticket.completed == true){
-			    //     	$scope.tickets.splice($scope.tickets.indexOf(temp_tickets[i]), 1);
-			    //     }
-		     //  	});
-				$scope.dontTickets();
-				console.log('No hace nada');
-				alert('No hace nada');
+				$scope.tasks = $scope.tasks.filter(function(task){ return task.completed !== 1; });
+				$scope.hideTickets();
+				console.log($scope.tasks);
 		    };
 
-		    $scope.dontTickets = function(){ $scope.visible_tickets = false; };
+		    $scope.hideTickets = function(){ $scope.visible_tickets = false; $scope.divSize = 'col-md-12'; };
 
 		  	$scope.partialURL = 'partials/tasks.html';
 		}else{ $location.path('/'); }
