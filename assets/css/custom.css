@@ -26,12 +26,6 @@ body {
 	padding: 5px 7px;
 }
 
-.glyphicon-ok {
-	color: #0F3;
-	margin-left: 10px;
-	margin-top: 20px;
-}
-
 .input-resposign {
 	width: 100%;
 }
@@ -94,6 +88,14 @@ a.list-group-item.incompleted {
 	background-color: #f0ad4e;
 	border-color: #eea236;
 }
+
+/*input.ng-dirty.ng-invalid {
+	border-color: #7C0023;
+	outline: 0;
+	outline: thin dotted \9;
+	-webkit-box-shadow: 0 0 8px #c7254e;
+	box-shadow: 0 0 8px #c7254e;
+}*/
 
 /* Style by Search Input */
 

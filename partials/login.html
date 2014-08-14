@@ -3,7 +3,7 @@
         <h2 class="form-signin-heading">Please log in</h2>
         <input type="email" class="form-control" placeholder="Email address" autofocus="true" ng-model="loginEmail">
         <input type="password" class="form-control" placeholder="Password" ng-model="loginPassword">
-        <div ng-show="warning" class="alert alert-danger" role="alert">
+        <div ng-show="warning" class="alert alert-danger fade in" role="alert">
             <button type="button" class="close" ng-click="dontError()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <p>{{ warning_text }}</p>
         </div>

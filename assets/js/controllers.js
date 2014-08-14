@@ -3,32 +3,39 @@ angular.module('toDoList.controllers', [])
     .controller('sessionController', ['$scope', '$location', '$cookieStore', 'usersService', function($scope, $location, $cookieStore, usersService){
 
     	// Login Variables
-    	// $scope.users = {};
+    	$scope.users = {};
     	$scope.loginEmail = '';
 		$scope.loginPassword = '';
 
 		// Restration Variables
-		$scope.warning2 = false;
     	$scope.registrationName = '';
 		$scope.registrationLastname = '';
 		$scope.registrationEmail = '';
 		$scope.registrationPassword = '';
 
-		$scope.doLogin = function(item, event){
+		$scope.warning2 = false;
+		$scope.warning_text2 = false;
+		$scope.errorEmail = false;
+
+		$scope.getUsers = function(){
 			$scope.users = usersService.listUsers({}, { }, function(response){
 	        	console.log('Correct Services Users');
-
-				angular.forEach($scope.users, function(user){
-					if(user.email == $scope.loginEmail){
-						if(user.name == $scope.loginPassword){
-			    			$scope.warning = false;
-			    			$cookieStore.put('current_user', user);
-
-			    			$location.path('/dashboard');
-						}else{ $scope.warning = true; }
-					}else{ $scope.warning = true; }
-				});
 	        });
+		};
+		$scope.getUsers();
+
+		$scope.doLogin = function(item, event){
+			// $scope.getUsers();
+			angular.forEach($scope.users, function(user){
+				if(user.email == $scope.loginEmail){
+					if(user.name == $scope.loginPassword){
+		    			$scope.warning = false;
+		    			$cookieStore.put('current_user', user);
+
+		    			$location.path('/dashboard');
+					}else{ $scope.warning = true; }
+				}else{ $scope.warning = true; }
+			});
 
 	        console.log('email: ' + $scope.loginEmail);
 	        console.log('password: ' + $scope.loginPassword);
@@ -55,22 +62,32 @@ angular.module('toDoList.controllers', [])
 			$location.path('/dashboard');
 	    };
 
-	 	$scope.validateEmail = function($email){
+	 	$scope.validateEmail = function(){
 	 		if($scope.registrationEmail != ''){
-				$scope.users = usersService.listUsers({}, { }, function(response){
-		        	console.log('Correct Services Users');
-
-					angular.forEach($scope.users, function(user){
-						if(user.email == $scope.registrationEmail){
-				    		$scope.warning2 = true;
-				    		$scope.warning_text2 = 'The email address exists';
-						}else{ $scope.warning = false; }
-					});
-		        	console.log('errores: '+$scope.warning);
-		        });	 			
-	 		}else{ $scope.warning = false; }
+				angular.forEach($scope.users, function(user){
+					if(user.email == $scope.registrationEmail){
+			    		$scope.warning2 		= true;
+			    		$scope.warning_text2 	= 'The email address exists';
+	        			console.log('The email address exists');
+					}else{ $scope.warning2 = false; }
+				});
+	 		}else{ $scope.warning2 = false; }
 	 	};
-	 	$scope.dontError = function(){ $scope.warning = false; };
+
+	 	$scope.validateForm = function(){
+	 		// if($scope.signinForm.registrationEmail.$valid){
+	 		// 	console.log('Valid');
+		 	// 	$scope.errorForm3 = 'has-success has-feedback';
+		 	// 	$scope.errorIcon3 = 'ok';
+	 		// }else{
+	 		// 	console.log('Invalid');
+		 	// 	$scope.errorForm3 = 'has-error has-feedback';
+		 	// 	$scope.errorIcon3 = 'remove';
+	 		// }
+	 	};
+
+	 	$scope.$watch($scope.validateForm);
+	 	$scope.dontError = function(){ $scope.warning = false; $scope.warning2 = false; console.log('No hay errores'); };
 	    $scope.logout = function(){ $location.path('/'); };
 	}])
 

@@ -1,23 +1,31 @@
 <div ng-controller="sessionController">
-    <form role="form" class="signinForm">
-        <div class="form-group">
+    <form name="signinForm" role="form" class="signinForm">
+        <div class="form-group" ng-class="{ 'has-success has-feedback' : signinForm.registrationEmail.$valid, 'has-remove has-feedback': signinForm.registrationEmail.$invalid }">
             <label>First Name</label>
-            <input type="text" class="form-control" placeholder="Enter First Name" ng-model="registrationName">
+            <input autofocus type="text" class="form-control" placeholder="Enter First Name" ng-model="registrationName">
+            <span ng-hide="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span ng-show="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>            
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{ 'has-success has-feedback' : signinForm.registrationEmail.$valid, 'has-remove has-feedback': signinForm.registrationEmail.$invalid }">
             <label>Lastname</label>
             <input type="text" class="form-control" placeholder="Enter Lastname" ng-model="registrationLastname">
+            <span ng-hide="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span ng-show="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>            
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{ 'has-success has-feedback' : signinForm.registrationEmail.$valid, 'has-remove has-feedback': signinForm.registrationEmail.$invalid }">
             <label>Email address</label>
-            <input ng-keypress="validateEmail()" type="email" class="form-control" placeholder="Enter email" ng-model="registrationEmail">
+            <input type="email" class="form-control" placeholder="Enter email" name="registrationEmail" ng-model="registrationEmail">
+            <span ng-hide="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span ng-show="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-class="{ 'has-success has-feedback' : signinForm.registrationEmail.$valid, 'has-remove has-feedback': signinForm.registrationEmail.$invalid }">
             <label>Password</label>
             <input type="password" class="form-control" placeholder="Enter Password" ng-model="registrationPassword">
+            <span ng-hide="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <span ng-show="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>            
         </div>
-        <div ng-show="warning2" class="alert alert-danger" role="alert">
-            <button type="button" class="close" ng-keyup="dontError()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <div ng-show="warning2" class="alert alert-danger fade in" role="alert">
+            <button type="button" class="close" ng-click="dontError()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <p>{{ warning_text2 }}</p>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="button" ng-click="doRegistration(item, $event)">Sign Up</button>
