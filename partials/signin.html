@@ -1,17 +1,30 @@
-<form role="form" class="signinForm">
-  	<div class="form-group">
-    	<label for="exampleInputEmail1">Email address</label>
-    	<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-  	</div>
-  	<div class="form-group">
-	    <label for="exampleInputPassword1">Password</label>
-	    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  	</div>
-  	<button class="btn btn-lg btn-primary btn-block" type="button" ng-click="doClick(item, $event)">Sign Up</button>
-	<br>
-	<br>
-    <a href="./#/" class="color-white">Login</a>  
-</form>
+<div ng-controller="sessionController">
+    <form role="form" class="signinForm">
+        <div class="form-group">
+            <label>First Name</label>
+            <input type="text" class="form-control" placeholder="Enter First Name" ng-model="registrationName">
+        </div>
+        <div class="form-group">
+            <label>Lastname</label>
+            <input type="text" class="form-control" placeholder="Enter Lastname" ng-model="registrationLastname">
+        </div>
+        <div class="form-group">
+            <label>Email address</label>
+            <input ng-keypress="validateEmail()" type="email" class="form-control" placeholder="Enter email" ng-model="registrationEmail">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" placeholder="Enter Password" ng-model="registrationPassword">
+        </div>
+        <div ng-show="warning2" class="alert alert-danger" role="alert">
+            <button type="button" class="close" ng-keyup="dontError()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <p>{{ warning_text2 }}</p>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="button" ng-click="doRegistration(item, $event)">Sign Up</button>
+        <br><br>
+        <a href="./#/" class="color-white">Login</a>
+    </form>
+</div>
 
 
 <style type="text/css">
@@ -28,7 +41,7 @@
 
     .signinForm{
 		margin: 0 auto;
-		margin-top: 10%;
+		margin-top: 7%;
     	width: 35%;
     }
 </style>

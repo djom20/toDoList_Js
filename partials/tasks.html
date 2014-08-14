@@ -1,31 +1,32 @@
 <div id="tasks" class="{{ divSize }} list-group">
+    <div class="zero-clipboard"><span ng-click="reloadServices()" class="btn-clipboard glyphicon glyphicon-refresh"></span></div>
     <li class="list-group-item">
-        <h4 style=""><span class="glyphicon glyphicon-tasks"></span> Tasks <span ng-show="tasks.length > 0">{{ remaining() }} / {{ tasks.length }}</span></h4>
+        <h4><span class="glyphicon glyphicon-tasks"></span> Tasks <span ng-show="tasks.length > 0">{{ remaining() }} / {{ tasks.length }}</span></h4>
     </li>
     <li class="list-group-item">
         <div class="input-group input-group-sm">
             <div class="input-group-btn">
                 <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Order <span class="caret"></span></button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a ng-click="sortBy('name','tasks')" href="javascript:void(0)">By Name</a></li>
-                    <li><a ng-click="sortBy('created_at','tasks')" href="javascript:void(0)">By Date</a></li>
-                    <li><a ng-click="sortBy('completed','tasks')" href="javascript:void(0)">By Completed</a></li>
-                    <li><a ng-click="sortBy('completed','tasks')" href="javascript:void(0)">By Incompleted</a></li>
+                    <li><a ng-click="orderBy('name','tasks')" href="javascript:void(0)">By Name</a></li>
+                    <li><a ng-click="orderBy('created_at','tasks')" href="javascript:void(0)">By Date</a></li>
+                    <li><a ng-click="orderBy('completed','tasks')" href="javascript:void(0)">By Completed</a></li>
+                    <li><a ng-click="orderBy('completed','tasks')" href="javascript:void(0)">By Incompleted</a></li>
                 </ul>
             </div>
-            <input type="text" class="form-control" placeholder="Search" ng-model="tasksFilter">
+            <input type="search" class="form-control" placeholder="Search" ng-model="tasksFilter">
             <div class="input-group-btn">
                 <button title="Remove all completed Task" ng-click="deleteTasksComplete()" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
             </div>
         </div>
     </li>
     <li class="list-group-item">
-        <input type="text" class="form-control input-sm" placeholder="Add a task" autofocus>
+        <input ng-keypress="addTask($event, newTaskName)" ng-model="newTaskName" type="search" class="form-control input-sm" placeholder="Add a task" autofocus>
     </li>
-    <a class="list-group-item {{ task.completed ? 'completed' : 'incompleted' }}" ng-repeat="task in tasks | orderBy:'orderTasks' | filter:tasksFilter">
+    <a class="list-group-item {{ task.completed ? 'completed' : 'incompleted' }}" ng-repeat="task in tasks | orderBy:'orderTasks' | filter:tasksFilter" ng-animate="'highlight'">
         <div class="input-group input-group-sm input-resposign">
             <div class="input-group input-group-sm">
-                <input ng-keypress="updateTask($event,task, newTaskName)" ng-model="newTaskName" type="text" class="form-control input-sm" placeholder="{{ task.name }}">
+                <input ng-keypress="updateTask($event,task, renameTaskName)" ng-model="renameTaskName" type="search" class="form-control input-sm" placeholder="{{ task.name }}">
                 <span class="input-group-btn">
                     <button title="Remove Task" ng-click="deleteTask(task)" class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
                     <button title="View all Tickets" ng-click="listTickets(task)" class="btn btn-info" type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>                            
@@ -37,32 +38,28 @@
 </div>
 <div id="items" class="col-md-6" ng-show="visible_tickets">
     <li class="list-group-item">
-        <div class="input-group input-group-sm">
-            <button type="button" class="close" ng-click="hideTickets()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        </div>
-    </li>
-    <li class="list-group-item">
-        <h4 style=""><span class="glyphicon glyphicon-list"></span> {{ current_task.name }}</h4>
+        <button type="button" class="close" ng-click="hideTickets()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4><span class="glyphicon glyphicon-list"></span> {{ current_task.name }}</h4>
     </li>
     <li class="list-group-item">
         <div class="input-group input-group-sm">
             <div class="input-group-btn">
                 <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Order <span class="caret"></span></button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a ng-click="sortBy('description','tickets')" href="javascript:void(0)">By Description</a></li>
-                    <li><a ng-click="sortBy('created_at','tickets')" href="javascript:void(0)">By Date</a></li>
-                    <li><a ng-click="sortBy('completed','tickets')" href="javascript:void(0)">By Completed</a></li>
-                    <li><a ng-click="sortBy('completed','tickets')" href="javascript:void(0)">By Incompleted</a></li>
+                    <li><a ng-click="orderBy('description','tickets')" href="javascript:void(0)">By Description</a></li>
+                    <li><a ng-click="orderBy('created_at','tickets')" href="javascript:void(0)">By Date</a></li>
+                    <li><a ng-click="orderBy('completed','tickets')" href="javascript:void(0)">By Completed</a></li>
+                    <li><a ng-click="orderBy('completed','tickets')" href="javascript:void(0)">By Incompleted</a></li>
                 </ul>
             </div>
-            <input type="text" class="form-control not-border" placeholder="Search" ng-model="ticketsFilter">
+            <input type="search" class="form-control not-border" placeholder="Search" ng-model="ticketsFilter">
             <div class="input-group-btn">
                 <button title="Remove all completed Tickets" ng-click="deleteTicketsComplete()" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
             </div>
         </div>
     </li>
     <li class="list-group-item">
-        <input type="text" class="form-control not-border input-sm" placeholder="Add a item">
+        <input ng-keypress="addTicket($event, newTicketDescription)" ng-model="newTicketDescription" type="search" class="form-control not-border input-sm" placeholder="Add a item">
     </li>
     <li ng-show="tasks.length > 0" class="list-group-item">
         <div class="progress">
@@ -74,9 +71,9 @@
     <li class="list-group-item" ng-repeat="ticket in tickets | orderBy: orderTicktes | filter:ticketsFilter">
         <div class="input-group input-group-sm">
             <span class="input-group-addon">
-                <input ng-checked="{{ ticket.completed }}" ng-click="changeStateTicket(ticket)" type="checkbox">
+                <input ng-checked="{{ ticket.completed }}" ng-click="updateStateTicket(ticket)" type="checkbox">
             </span>
-            <input ng-keypress="updateTicket($event, ticket, newTicketName)" ng-model="newTicketName" type="text" class="form-control" placeholder="{{ ticket.description }}">
+            <input ng-keypress="updateTicket($event, ticket, renameTicketName)" ng-model="renameTicketName" type="search" class="form-control" placeholder="{{ ticket.description }}">
             <span class="input-group-btn">
                 <button title="Remove Ticket" ng-click="deleteTicket(ticket)" class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
             </span>

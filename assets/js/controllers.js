@@ -1,24 +1,27 @@
 angular.module('toDoList.controllers', [])
-	
-	// .controller('taskList', ['$scope','taskService','taskService2', function($scope, taskService, taskService2){
- //        $scope.tasks = taskService2.listTasks({}, {'uid':1}, function(response){ console.log(response); });
- //    }])
 
     .controller('sessionController', ['$scope', '$location', '$cookieStore', 'usersService', function($scope, $location, $cookieStore, usersService){
 
+    	// Login Variables
+    	// $scope.users = {};
     	$scope.loginEmail = '';
 		$scope.loginPassword = '';
 
-		$scope.doClick = function(item, event){
+		// Restration Variables
+		$scope.warning2 = false;
+    	$scope.registrationName = '';
+		$scope.registrationLastname = '';
+		$scope.registrationEmail = '';
+		$scope.registrationPassword = '';
+
+		$scope.doLogin = function(item, event){
 			$scope.users = usersService.listUsers({}, { }, function(response){
-	        	console.log('Correct Services Api Users');
+	        	console.log('Correct Services Users');
 
 				angular.forEach($scope.users, function(user){
 					if(user.email == $scope.loginEmail){
 						if(user.name == $scope.loginPassword){
 			    			$scope.warning = false;
-			    			$scope.current_user = user;
-
 			    			$cookieStore.put('current_user', user);
 
 			    			$location.path('/dashboard');
@@ -37,12 +40,44 @@ angular.module('toDoList.controllers', [])
 	        }
 	    };
 
+	    $scope.doRegistration = function(item, event){
+			var user = {
+				id: 1,
+				name: $scope.registrationName,
+				lastname: $scope.registrationLastname,
+				email: $scope.registrationEmail,
+				password: $scope.registrationPassword,
+				state: 1
+			};
+
+			$scope.warning = false;
+			$cookieStore.put('current_user', user);
+			$location.path('/dashboard');
+	    };
+
+	 	$scope.validateEmail = function($email){
+	 		if($scope.registrationEmail != ''){
+				$scope.users = usersService.listUsers({}, { }, function(response){
+		        	console.log('Correct Services Users');
+
+					angular.forEach($scope.users, function(user){
+						if(user.email == $scope.registrationEmail){
+				    		$scope.warning2 = true;
+				    		$scope.warning_text2 = 'The email address exists';
+						}else{ $scope.warning = false; }
+					});
+		        	console.log('errores: '+$scope.warning);
+		        });	 			
+	 		}else{ $scope.warning = false; }
+	 	};
 	 	$scope.dontError = function(){ $scope.warning = false; };
 	    $scope.logout = function(){ $location.path('/'); };
 	}])
 
 	.controller('dashboardController', ['$scope', '$cookieStore', '$location', 'tasksService', 'ticketsService', function($scope, $cookieStore, $location, tasksService, ticketsService){
 		if($cookieStore.get('current_user')){
+
+			// Variables
 			$scope.current_user = $cookieStore.get('current_user');
 			$scope.userName = $cookieStore.get('current_user').name + ' ' + $cookieStore.get('current_user').lastname;
 			$scope.visible_tickets = false;
@@ -51,15 +86,18 @@ angular.module('toDoList.controllers', [])
 			$scope.divSize = 'col-md-12';
 			$scope.current_task = {};
 			$scope.tickets = {};
-			
+			$scope.newTicketDescription = '';
+			$scope.newTaskName = '';
+
+			// Invoking Services
 			$scope.tasks = tasksService.listTasks({}, {'uid': $scope.current_user.id}, function(response){
-	        	console.log('Correct Services Api Tasks');
+	        	console.log('Correct Services Tasks');
 	        });
 
 		    $scope.listTickets = function(current_task){
 			    console.log('List Tickets');
 		        $scope.tickets = ticketsService.listTickets({}, {'uid':$scope.current_user.id, 'tid': current_task.id}, function(response){
-		        	console.log('Correct Services Api Tickets');
+		        	console.log('Correct Services Tickets');
 		        });
 
 		        $scope.divSize = 'col-md-6';
@@ -71,7 +109,15 @@ angular.module('toDoList.controllers', [])
 		      	return current_task.id;
 		    };
 
-		    $scope.sortBy = function(order, type){
+		    // Helpers Functions
+		    $scope.reloadServices = function(){
+	        	console.log('Click at reloadServices');
+			    $scope.tasks = tasksService.listTasks({}, {'uid': $scope.current_user.id}, function(response){
+	        		console.log('Correct Reload Services Tasks');
+	        	});
+		    };
+
+		    $scope.orderBy = function(order, type){
 			    if(type == 'tasks'){
 			    	console.log('Orders Tasks by ' + order);
 			    	$scope.orderTasks = order;
@@ -89,12 +135,6 @@ angular.module('toDoList.controllers', [])
 		      	return Math.round(total);
 		    };
 
-		    $scope.changeStateTicket = function(ticket){
-			    if(ticket.completed == 1){ ticket.completed = 0; }else{ ticket.completed = 1; }
-			    console.log('item change a ' + ticket.completed);
-			    $scope.validateStateTask();
-		    };
-
 		    $scope.validateStateTask = function(ticket){
 				total = $scope.percentage();
 		    	if(total == 100){ $scope.current_task.completed = 1; }else{ $scope.current_task.completed = 0; }
@@ -106,6 +146,42 @@ angular.module('toDoList.controllers', [])
 		      	return count;
 		    };
 
+		    // Add Functions
+			$scope.addTask = function(keyEvent, newTaskName){
+		      	if (keyEvent.which === 13){
+		      		$scope.tasks.push({
+		      			user_id 		: $scope.current_user.id,
+		      			name 			: newTaskName,
+		      			completed	 	: 0,
+		      			state 			: 1,
+		      			created_at	 	: '2014-08-14T16:49:02.000Z',
+		      			updated_at	 	: '2014-08-14T16:49:02.000Z'
+		      		});
+					$scope.newTaskName = null;
+		      	}
+		    };
+
+		    $scope.addTicket = function(keyEvent, newTicketDescription){
+		      	if (keyEvent.which === 13){
+		      		$scope.tickets.push({
+		      			user_id 		: $scope.current_task.id,
+		      			description 	: newTicketDescription,
+		      			completed	 	: 0,
+		      			state 			: 1,
+		      			created_at	 	: '2014-08-14T16:49:02.000Z',
+		      			updated_at	 	: '2014-08-14T16:49:02.000Z'
+		      		});
+					$scope.newTicketDescription = null;
+		      	}
+		    };
+
+		    // Update Functions
+		    $scope.updateStateTicket = function(ticket){
+			    if(ticket.completed == 1){ ticket.completed = 0; }else{ ticket.completed = 1; }
+			    console.log('item change a ' + ticket.completed);
+			    $scope.validateStateTask();
+		    };
+
 		    $scope.updateTicket = function(keyEvent, ticket, inputText){
 			    if (keyEvent.which === 13){ ticket.description = inputText; }
 		    };
@@ -114,6 +190,7 @@ angular.module('toDoList.controllers', [])
 		      	if (keyEvent.which === 13){ task.name = inputText; }
 		    };
 
+		    // Deleted functions
 		    $scope.deleteTicket = function(ticket){
 				// $scope.tickets = ticketsService.deleteTickets({}, {'uid': $scope.current_user.id, 'tid': $scope.current_task.id, 'ticd': ticket.id}, function(response){
 		    		$scope.tickets.splice($scope.tickets.indexOf(ticket), 1);
@@ -137,7 +214,6 @@ angular.module('toDoList.controllers', [])
 		    };
 
 		    $scope.hideTickets = function(){ $scope.visible_tickets = false; $scope.divSize = 'col-md-12'; };
-
 		  	$scope.partialURL = 'partials/tasks.html';
 		}else{ $location.path('/'); }
 	}]);
