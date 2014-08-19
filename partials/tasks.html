@@ -23,13 +23,13 @@
     <li class="list-group-item">
         <input ng-keypress="addTask($event, newTaskName)" ng-model="newTaskName" type="search" class="form-control input-sm" placeholder="Add a task" autofocus>
     </li>
-    <a class="list-group-item {{ task.completed ? 'completed' : 'incompleted' }}" ng-repeat="task in tasks | orderBy:'orderTasks' | filter:tasksFilter" ng-animate="'highlight'">
+    <a class="list-group-item {{ task.completed ? 'completed' : 'incompleted' }}" ng-repeat="task in tasks | orderBy:'orderTasks' | filter:tasksFilter" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
         <div class="input-group input-group-sm input-resposign">
             <div class="input-group input-group-sm">
                 <input ng-keypress="updateTask($event,task, renameTaskName)" ng-model="renameTaskName" type="search" class="form-control input-sm" placeholder="{{ task.name }}">
                 <span class="input-group-btn">
                     <button title="Remove Task" ng-click="deleteTask(task)" class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>
-                    <button title="View all Tickets" ng-click="listTickets(task)" class="btn btn-info" type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>                            
+                    <button ng-animate="'highlight'" title="View all Tickets" ng-click="listTickets(task)" class="btn btn-info" type="button"><span class="glyphicon glyphicon-chevron-right"></span></button>                            
                 </span>
             </div>
         </div>
@@ -73,6 +73,9 @@
             <span class="input-group-addon">
                 <input ng-checked="{{ ticket.completed }}" ng-click="updateStateTicket(ticket)" type="checkbox">
             </span>
+            <!-- <div class="btn-group btn-group-sm" data-toggle="buttons">
+                <label class="btn btn-primary"><input type="checkbox"> Option 2</label>
+            </div> -->
             <input ng-keypress="updateTicket($event, ticket, renameTicketName)" ng-model="renameTicketName" type="search" class="form-control" placeholder="{{ ticket.description }}">
             <span class="input-group-btn">
                 <button title="Remove Ticket" ng-click="deleteTicket(ticket)" class="btn btn-danger" type="button"><span class="glyphicon glyphicon-trash"></span></button>

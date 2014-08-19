@@ -1,28 +1,24 @@
 <div ng-controller="sessionController">
     <form name="signinForm" role="form" class="signinForm">
-        <div class="form-group" ng-class="{ 'has-success has-feedback' : signinForm.registrationEmail.$valid, 'has-remove has-feedback': signinForm.registrationEmail.$invalid }">
+        <div class="form-group" ng-class="{ 'has-error has-feedback': signinForm.registrationName.$invalid }">
             <label>First Name</label>
-            <input autofocus type="text" class="form-control" placeholder="Enter First Name" ng-model="registrationName">
-            <span ng-hide="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-remove form-control-feedback"></span>
-            <span ng-show="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>            
+            <input autofocus type="text" class="form-control" placeholder="Enter First Name" name="registrationName" ng-model="registrationName">
+            <span ng-show="signinForm.registrationName.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
         </div>
-        <div class="form-group" ng-class="{ 'has-success has-feedback' : signinForm.registrationEmail.$valid, 'has-remove has-feedback': signinForm.registrationEmail.$invalid }">
+        <div class="form-group" ng-class="{ 'has-error has-feedback': signinForm.registrationLastname.$invalid }">
             <label>Lastname</label>
-            <input type="text" class="form-control" placeholder="Enter Lastname" ng-model="registrationLastname">
-            <span ng-hide="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-remove form-control-feedback"></span>
-            <span ng-show="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>            
+            <input type="text" class="form-control" placeholder="Enter Lastname" name="registrationLastname" ng-model="registrationLastname">
+            <span ng-show="signinForm.registrationLastname.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
         </div>
-        <div class="form-group" ng-class="{ 'has-success has-feedback' : signinForm.registrationEmail.$valid, 'has-remove has-feedback': signinForm.registrationEmail.$invalid }">
+        <div class="form-group" ng-class="{ 'has-error has-feedback': signinForm.registrationEmail.$invalid }">
             <label>Email address</label>
             <input type="email" class="form-control" placeholder="Enter email" name="registrationEmail" ng-model="registrationEmail">
-            <span ng-hide="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-remove form-control-feedback"></span>
-            <span ng-show="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>
+            <span ng-show="signinForm.registrationEmail.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
         </div>
-        <div class="form-group" ng-class="{ 'has-success has-feedback' : signinForm.registrationEmail.$valid, 'has-remove has-feedback': signinForm.registrationEmail.$invalid }">
+        <div class="form-group" ng-class="{ 'has-error has-feedback': signinForm.registrationPassword.$invalid }">
             <label>Password</label>
-            <input type="password" class="form-control" placeholder="Enter Password" ng-model="registrationPassword">
-            <span ng-hide="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-remove form-control-feedback"></span>
-            <span ng-show="signinForm.registrationEmail.$valid" class="glyphicon glyphicon-ok form-control-feedback"></span>            
+            <input type="password" class="form-control" placeholder="Enter Password" name="registrationPassword" ng-model="registrationPassword">
+            <span ng-show="signinForm.registrationPassword.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
         </div>
         <div ng-show="warning2" class="alert alert-danger fade in" role="alert">
             <button type="button" class="close" ng-click="dontError()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -33,7 +29,6 @@
         <a href="./#/" class="color-white">Login</a>
     </form>
 </div>
-
 
 <style type="text/css">
     body {
